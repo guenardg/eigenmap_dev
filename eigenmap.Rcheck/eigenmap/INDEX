@@ -1,0 +1,7 @@
+Euclid                  Calculation of the Euclidean Distance
+eigenmap                Spatial Eigenvector Maps
+eigenmap-class          Class and Methods for Spatial Eigenvector Maps
+eigenmap-package        Spatial and Temporal Eigenvector Map
+geodesics               Calculation of Geodesic Distances
+mite                    The Oribatid Mite Data Set
+weighting-functions     Weighting Functions for Spatial Eigenvector Map

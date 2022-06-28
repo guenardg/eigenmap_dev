@@ -1,0 +1,6 @@
+name	user	system	elapsed
+Euclid	0.003	0.000	0.002	
+eigenmap	0.02	0.00	0.02	
+geodesics	0.002	0.001	0.003	
+mite	0.019	0.000	0.019	
+weighting-functions	0.006	0.000	0.007	

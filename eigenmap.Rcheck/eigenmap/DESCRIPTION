@@ -1,0 +1,20 @@
+Package: eigenmap
+Type: Package
+Version: 1.0-1
+Date: 2022-06-01
+Encoding: UTF-8
+Title: Spatial and Temporal Eigenvector Map
+Author: Guillaume Guenard
+Maintainer: Guillaume Guenard <guillaume.guenard@gmail.com>
+Description: Computation of spatial and temporal eigenvector maps.
+Depends: R (>= 3.5.0)
+Suggests: knitr
+Imports:
+License: GPL-3
+LazyLoad: yes
+NeedsCompilation: yes
+VignetteBuilder: knitr
+Repository: CRAN
+RoxygenNote: 7.2.0
+Packaged: 2022-06-28 15:24:23 UTC; guenardg
+Built: R 4.2.1; x86_64-pc-linux-gnu; 2022-06-28 15:24:56 UTC; unix

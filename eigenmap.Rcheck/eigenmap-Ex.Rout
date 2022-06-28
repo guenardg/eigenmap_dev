@@ -1,0 +1,513 @@
+
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "eigenmap"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "eigenmap-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('eigenmap')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("Euclid")
+> ### * Euclid
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: Euclid
+> ### Title: Calculation of the Euclidean Distance
+> ### Aliases: Euclid
+> 
+> ### ** Examples
+> 
+> ### A set of reference points:
+> x <- cbind(c(1,4,5,2,8,4), c(3,6,7,1,3,2))
+> dimnames(x) <- list(LETTERS[1:6], c("x", "y"))
+> 
+> ## The pairwise Euclidean distances among the reference points: 
+> d1 <- Euclid(x)
+> d1
+         A        B        C        D        E
+B 4.242641                                    
+C 5.656854 1.414214                           
+D 2.236068 5.385165 6.708204                  
+E 7.000000 5.000000 5.000000 6.324555         
+F 3.162278 4.000000 5.099020 2.236068 4.123106
+> 
+> ## That result is the same as that obtained from function dist:
+> d2 <- dist(x, method = "euclidean")
+> all(d1 == d2)
+[1] TRUE
+> 
+> ## A second set of points:
+> y <- cbind(c(3,5,7), c(3,6,8))
+> dimnames(y) <- list(LETTERS[7:9], c("x", "y"))
+> 
+> ## The distances between the points in y (rows) and x (columns):
+> Euclid(x, y)
+        A        B        C        D        E        F
+G 2.00000 3.162278 4.472136 2.236068 5.000000 1.414214
+H 5.00000 1.000000 1.000000 5.830952 4.242641 4.123106
+I 7.81025 3.605551 2.236068 8.602325 5.099020 6.708204
+attr(,"method")
+[1] "euclidean"
+attr(,"call")
+Euclid(x = x, y = y)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("Euclid", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("eigenmap")
+> ### * eigenmap
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: eigenmap
+> ### Title: Spatial Eigenvector Maps
+> ### Aliases: eigenmap eigenmap.score
+> 
+> ### ** Examples
+> 
+> ### A unevenly sampled surface.
+> 
+> data(mite)
+> 
+> ## Example using the principal coordinates of the square root of the
+> ## (Euclidean) distances:
+> map <- eigenmap(x = as.matrix(mite.geo), weighting = wf.sqrd)
+> map
+
+Moran's eigenvector map containing 69 basis functions.
+Functions span 70 observations.
+
+Eigenvalues:
+ [1] 60.89610735 14.22152207  8.41870405  5.89706922  4.11987122  2.64830105
+ [7]  1.98173715  1.85673928  1.44776062  1.10692005  1.00218240  0.89816780
+[13]  0.85048672  0.79590199  0.66794152  0.60991887  0.54801539  0.52423505
+[19]  0.48957848  0.46912575  0.45406238  0.40818614  0.36240588  0.34762422
+[25]  0.34027201  0.32313100  0.29585953  0.28619079  0.27793717  0.27147324
+[31]  0.26030391  0.25245184  0.24756163  0.22754695  0.21704973  0.21240497
+[37]  0.19465971  0.18739342  0.18216584  0.17391419  0.16735018  0.16663121
+[43]  0.16289912  0.16160712  0.14910879  0.14496635  0.13454073  0.13423831
+[49]  0.12940252  0.12599412  0.12076617  0.11881841  0.11700732  0.10939993
+[55]  0.10660757  0.10216638  0.09212580  0.09179303  0.08942191  0.08925574
+[61]  0.08412840  0.08271486  0.08185701  0.07875635  0.07508076  0.06894997
+[67]  0.06766063  0.06287404  0.05507047
+
+> ## plot(map)
+> 
+> ## Example using the radial basis functions (RBF):
+> map <- eigenmap(x = as.matrix(mite.geo), weighting = wf.RBF)
+> map
+
+Moran's eigenvector map containing 69 basis functions.
+Functions span 70 observations.
+
+Eigenvalues:
+ [1]  6.34778984  5.74755021  4.09612984  3.87263848  3.09466915  2.80551046
+ [7]  2.47665874  2.08130939  1.48380623  1.31606510  1.06531979  0.90558473
+[13]  0.55739471  0.42262895  0.30791594  0.24847126  0.05791416 -0.01518904
+[19] -0.06951455 -0.08240981 -0.24569677 -0.33269992 -0.42011124 -0.49553007
+[25] -0.53426322 -0.55918931 -0.63479092 -0.67969662 -0.71047308 -0.71369844
+[31] -0.77872741 -0.79710281 -0.82093725 -0.85509393 -0.85666661 -0.88208045
+[37] -0.89369567 -0.91946493 -0.93103402 -0.93640515 -0.94722235 -0.94832663
+[43] -0.95878972 -0.97023758 -0.97079847 -0.97601704 -0.97642156 -0.98294394
+[49] -0.98337203 -0.98566110 -0.98815182 -0.99117279 -0.99271795 -0.99329020
+[55] -0.99394321 -0.99528186 -0.99661014 -0.99759274 -0.99784587 -0.99792586
+[61] -0.99821263 -0.99883289 -0.99936579 -0.99944714 -0.99969968 -0.99976160
+[67] -0.99980502 -0.99994347 -0.99995873
+
+> ## plot(map)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("eigenmap", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("geodesics")
+> ### * geodesics
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: geodesics
+> ### Title: Calculation of Geodesic Distances
+> ### Aliases: geodesics
+> 
+> ### ** Examples
+> 
+> ### First example: locations spread throughout the world
+> 
+> coords <- cbind(c(43,22,9,12,-40,72,-86,-22),
++                 c(-135,22,0,1,-45,12,27,-139))
+> 
+> res_hav <- geodesics(coords)  ## Default: the haversine formula
+> res_hav
+           1          2          3          4          5          6          7
+2 10540925.5                                                                  
+3 10676283.7  2737494.7                                                       
+4 10556652.9  2474535.5   350996.2                                            
+5 10805862.5  8842939.8  6775748.5  7055044.1                                 
+6  6626582.2  5417712.0  6698215.8  6406283.3 10969966.6                      
+7 11846828.7 10309463.6  9426777.3  9645612.4  5271134.4 12510276.9           
+8  6856057.8 12591919.9 11918166.8 11995861.0  8102715.0 11421211.9  7479140.6
+> 
+> res_vif <- geodesics(coords, method = "Vincenty")
+> res_vif
+           1          2          3          4          5          6          7
+2 12433475.4                                                                  
+3 12671758.8  2758096.6                                                       
+4 12456821.4  2490846.8   349419.6                                            
+5 12882400.5  9759003.5  7130580.1  7461500.4                                 
+6  6989333.0  5594645.7  7044752.0  6706056.8 13186939.1                      
+7 15188083.4 11990654.5 10598722.0 10926947.3  5446565.5 17559911.6           
+8  7208212.4 18072004.7 15421082.6 15645655.8  8796614.7 14151829.7  8002005.7
+> 
+> attr(res_vif,"niter") ## The numbers of iterations
+ [1] 5 5 5 5 4 4 5 5 5 5 4 4 5 5 5 4 4 5 5 4 4 5 5 3 5 4 5 4
+> res_vif-res_hav       ## Absolute difference
+            1           2           3           4           5           6
+2 1892549.926                                                            
+3 1995475.093   20601.945                                                
+4 1900168.527   16311.329   -1576.537                                    
+5 2076538.022  916063.740  354831.611  406456.319                        
+6  362750.772  176933.635  346536.247  299773.478 2216972.523            
+7 3341254.661 1681190.921 1171944.722 1281334.968  175431.028 5049634.700
+8  352154.582 5480084.747 3502915.809 3649794.776  693899.675 2730617.792
+            7
+2            
+3            
+4            
+5            
+6            
+7            
+8  522865.149
+> 200*(res_vif-res_hav)/(res_vif+res_hav) ## Large relative difference
+           1          2          3          4          5          6          7
+2 16.4752929                                                                  
+3 17.0932967  0.7497626                                                       
+4 16.5135303  0.6570019 -0.4501717                                            
+5 17.5322102  9.8491187  5.1031674  5.5999045                                 
+6  5.3283347  3.2133652  5.0431064  4.5723872 18.3547724                      
+7 24.7180730 15.0778656 11.7045244 12.4567384  3.2736693 33.5856538           
+8  5.0077904 35.7428791 25.6255448 26.4080644  8.2121562 21.3554400  6.7548635
+> 
+> ### Second example: locations nearer from one another
+> 
+> coords <- cbind(c(45.01,44.82,45.23,44.74),
++                 c(72.03,72.34,71.89,72.45))
+> 
+> res_hav <- geodesics(coords)
+> res_vif <- geodesics(coords, method = "Vincenty")
+> res_vif-res_hav       ## Absolute difference
+           1          2          3
+2 43.6077934                      
+3  0.4681003 40.7011044           
+4 56.7066071 13.0589972 53.7659041
+> 200*(res_vif-res_hav)/(res_vif+res_hav) ## Relative difference are smaller
+            1           2           3
+2 0.134987125                        
+3 0.001745591 0.070515390            
+4 0.126826308 0.105003417 0.076713982
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("geodesics", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mite")
+> ### * mite
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mite
+> ### Title: The Oribatid Mite Data Set
+> ### Aliases: mite mite.species mite.env mite.geo
+> ### Keywords: mite
+> 
+> ### ** Examples
+> 
+> data(mite)
+> summary(mite.species)
+    Brachysp         Phthirsp        Hopcflpa         Rhysardu     
+ Min.   : 0.000   Min.   :0.000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.: 3.000   1st Qu.:0.000   1st Qu.: 4.000   1st Qu.: 0.000  
+ Median : 4.500   Median :0.000   Median : 6.500   Median : 0.000  
+ Mean   : 8.729   Mean   :1.271   Mean   : 8.514   Mean   : 1.214  
+ 3rd Qu.:11.750   3rd Qu.:2.000   3rd Qu.:12.000   3rd Qu.: 1.000  
+ Max.   :42.000   Max.   :8.000   Max.   :37.000   Max.   :13.000  
+    Atrostri         Protopsp          Malacfeg         Malacfpr     
+ Min.   :0.0000   Min.   : 0.0000   Min.   : 0.000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.: 0.0000   1st Qu.: 0.000   1st Qu.:0.0000  
+ Median :0.0000   Median : 0.0000   Median : 1.000   Median :0.0000  
+ Mean   :0.3143   Mean   : 0.3714   Mean   : 2.186   Mean   :0.1571  
+ 3rd Qu.:0.0000   3rd Qu.: 0.0000   3rd Qu.: 3.000   3rd Qu.:0.0000  
+ Max.   :6.0000   Max.   :13.0000   Max.   :17.000   Max.   :2.0000  
+    Malacosp         Eniominu         Hypochsp         Nothprat     
+ Min.   :0.0000   Min.   : 0.000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.:0.0000   1st Qu.: 0.000   1st Qu.: 0.000   1st Qu.: 0.000  
+ Median :0.0000   Median : 0.000   Median : 0.000   Median : 1.000  
+ Mean   :0.8286   Mean   : 4.914   Mean   : 1.957   Mean   : 1.886  
+ 3rd Qu.:1.0000   3rd Qu.: 4.750   3rd Qu.: 2.750   3rd Qu.: 2.750  
+ Max.   :7.0000   Max.   :36.000   Max.   :20.000   Max.   :10.000  
+    Tectvela         Oppinova        Suctobsp        Limncfci     
+ Min.   : 0.000   Min.   : 0.00   Min.   : 0.00   Min.   :  0.00  
+ 1st Qu.: 0.000   1st Qu.: 5.00   1st Qu.: 7.25   1st Qu.:  1.25  
+ Median : 3.000   Median :10.50   Median :13.50   Median : 13.00  
+ Mean   : 9.057   Mean   :17.27   Mean   :16.96   Mean   : 35.26  
+ 3rd Qu.:19.000   3rd Qu.:24.25   3rd Qu.:24.00   3rd Qu.: 44.00  
+ Max.   :42.000   Max.   :73.00   Max.   :63.00   Max.   :723.00  
+    Oribatsp         Ceratsp1        Paracfwi        Galumsp1     
+ Min.   : 0.000   Min.   :0.000   Min.   :0.000   Min.   :0.0000  
+ 1st Qu.: 0.000   1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.0000  
+ Median : 0.000   Median :1.000   Median :0.000   Median :0.0000  
+ Mean   : 1.886   Mean   :1.286   Mean   :1.086   Mean   :0.9571  
+ 3rd Qu.: 2.750   3rd Qu.:2.000   3rd Qu.:1.000   3rd Qu.:1.0000  
+ Max.   :17.000   Max.   :5.000   Max.   :8.000   Max.   :8.0000  
+    Stegasp2         Hyporufu         Trhyposp         Platpelt     
+ Min.   :0.0000   Min.   :0.0000   Min.   : 0.000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.: 0.000   1st Qu.:0.0000  
+ Median :0.0000   Median :0.0000   Median : 0.000   Median :0.0000  
+ Mean   :0.7286   Mean   :0.2286   Mean   : 2.614   Mean   :0.1714  
+ 3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.: 2.000   3rd Qu.:0.0000  
+ Max.   :9.0000   Max.   :3.0000   Max.   :29.000   Max.   :3.0000  
+    Nanhcfco        Schecfla      Fuscseto         Lepidosp     
+ Min.   :0.000   Min.   :0.0   Min.   : 0.000   Min.   :0.0000  
+ 1st Qu.:0.000   1st Qu.:0.0   1st Qu.: 0.000   1st Qu.:0.0000  
+ Median :0.500   Median :0.0   Median : 0.000   Median :0.0000  
+ Mean   :1.129   Mean   :0.4   Mean   : 1.857   Mean   :0.1714  
+ 3rd Qu.:1.750   3rd Qu.:0.0   3rd Qu.: 2.000   3rd Qu.:0.0000  
+ Max.   :7.000   Max.   :8.0   Max.   :12.000   Max.   :3.0000  
+    Eupelops         Galumsp2         Limncfru        Protorsp      Ceratsp2  
+ Min.   :0.0000   Min.   :0.0000   Min.   : 0.00   Min.   :0.0   Min.   :0.0  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.: 0.00   1st Qu.:0.0   1st Qu.:0.0  
+ Median :0.0000   Median :0.0000   Median : 4.50   Median :0.0   Median :0.0  
+ Mean   :0.6429   Mean   :0.2429   Mean   :10.43   Mean   :0.8   Mean   :1.3  
+ 3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:17.75   3rd Qu.:1.0   3rd Qu.:2.0  
+ Max.   :4.0000   Max.   :5.0000   Max.   :57.00   Max.   :9.0   Max.   :9.0  
+    Oppcfmin        Trimalsp     
+ Min.   :0.000   Min.   : 0.000  
+ 1st Qu.:0.000   1st Qu.: 0.000  
+ Median :0.000   Median : 0.000  
+ Mean   :1.114   Mean   : 2.071  
+ 3rd Qu.:1.750   3rd Qu.: 0.000  
+ Max.   :9.000   Max.   :33.000  
+> summary(mite.env)
+    SubsDens        WatrCont     Substrate:Sphagn1 Substrate:Sphagn2
+ Min.   :21.17   Min.   :134.1   Min.   :0.0000    Min.   :0.0000   
+ 1st Qu.:30.01   1st Qu.:314.1   1st Qu.:0.0000    1st Qu.:0.0000   
+ Median :36.38   Median :398.5   Median :0.0000    Median :0.0000   
+ Mean   :39.28   Mean   :410.6   Mean   :0.3571    Mean   :0.1571   
+ 3rd Qu.:46.81   3rd Qu.:492.8   3rd Qu.:1.0000    3rd Qu.:0.0000   
+ Max.   :80.59   Max.   :827.0   Max.   :1.0000    Max.   :1.0000   
+ Substrate:Sphagn3 Substrate:Sphagn4 Substrate:Litter  Substrate:Barepeat
+ Min.   :0.00000   Min.   :0.00000   Min.   :0.00000   Min.   :0.00000   
+ 1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.00000   
+ Median :0.00000   Median :0.00000   Median :0.00000   Median :0.00000   
+ Mean   :0.01429   Mean   :0.02857   Mean   :0.02857   Mean   :0.02857   
+ 3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.00000   
+ Max.   :1.00000   Max.   :1.00000   Max.   :1.00000   Max.   :1.00000   
+ Substrate:Interface   Shrub:None       Shrub:Few        Shrub:Many    
+ Min.   :0.0000      Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.0000      1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :0.0000      Median :0.0000   Median :0.0000   Median :0.0000  
+ Mean   :0.3857      Mean   :0.2714   Mean   :0.3714   Mean   :0.3571  
+ 3rd Qu.:1.0000      3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:1.0000  
+ Max.   :1.0000      Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+  Topo:Blanket     Topo:Hummock   
+ Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :1.0000   Median :0.0000  
+ Mean   :0.6286   Mean   :0.3714  
+ 3rd Qu.:1.0000   3rd Qu.:1.0000  
+ Max.   :1.0000   Max.   :1.0000  
+> summary(mite.geo)
+       x               y        
+ Min.   :0.050   Min.   :0.100  
+ 1st Qu.:0.400   1st Qu.:2.700  
+ Median :1.400   Median :5.400  
+ Mean   :1.233   Mean   :5.026  
+ 3rd Qu.:1.800   3rd Qu.:7.300  
+ Max.   :2.400   Max.   :9.700  
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mite", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("weighting-functions")
+> ### * weighting-functions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: weighting-functions
+> ### Title: Weighting Functions for Spatial Eigenvector Map
+> ### Aliases: weighting-functions wf.sqrd wf.RBF wf.PCNM wf.binary wf.Drayf1
+> ###   wf.Drayf2 wf.Drayf3
+> 
+> ### ** Examples
+> 
+> locations <- c(1,2,4,7,10,14,17,21)
+> D <- dist(locations)
+> wf.sqrd(D)
+      1     2     3     4     5     6     7
+2  -0.5                                    
+3  -1.5  -1.0                              
+4  -3.0  -2.5  -1.5                        
+5  -4.5  -4.0  -3.0  -1.5                  
+6  -6.5  -6.0  -5.0  -3.5  -2.0            
+7  -8.0  -7.5  -6.5  -5.0  -3.5  -1.5      
+8 -10.0  -9.5  -8.5  -7.0  -5.5  -3.5  -2.0
+> wf.RBF(D, wpar = 0.1)
+             1            2            3            4            5            6
+2 9.048374e-01                                                                 
+3 4.065697e-01 6.703200e-01                                                    
+4 2.732372e-02 8.208500e-02 4.065697e-01                                       
+5 3.035391e-04 1.661557e-03 2.732372e-02 4.065697e-01                          
+6 4.575339e-08 5.573904e-07 4.539993e-05 7.446583e-03 2.018965e-01             
+7 7.621865e-12 1.691898e-10 4.575339e-08 4.539993e-05 7.446583e-03 4.065697e-01
+8 4.248354e-18 2.098791e-16 2.811185e-13 3.074880e-09 5.559513e-06 7.446583e-03
+             7
+2             
+3             
+4             
+5             
+6             
+7             
+8 2.018965e-01
+> wf.binary(D, c(0,5))
+  1 2 3 4 5 6 7
+2 1            
+3 1 1          
+4 0 1 1        
+5 0 0 0 1      
+6 0 0 0 0 1    
+7 0 0 0 0 0 1  
+8 0 0 0 0 0 0 1
+> wf.PCNM(D, c(0,5))
+       1      2      3      4      5      6      7
+2   -0.5                                          
+3   -4.5   -2.0                                   
+4 -200.0  -12.5   -4.5                            
+5 -200.0 -200.0 -200.0   -4.5                     
+6 -200.0 -200.0 -200.0 -200.0   -8.0              
+7 -200.0 -200.0 -200.0 -200.0 -200.0   -4.5       
+8 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0   -8.0
+> wf.Drayf1(D, c(0,5))
+     1    2    3    4    5    6    7
+2 0.95                              
+3 0.85 0.90                         
+4 0.00 0.75 0.85                    
+5 0.00 0.00 0.00 0.85               
+6 0.00 0.00 0.00 0.00 0.80          
+7 0.00 0.00 0.00 0.00 0.00 0.85     
+8 0.00 0.00 0.00 0.00 0.00 0.00 0.80
+> wf.Drayf2(D, c(0,5), 0.5)
+          1         2         3         4         5         6         7
+2 0.7763932                                                            
+3 0.6127017 0.6837722                                                  
+4 0.0000000 0.5000000 0.6127017                                        
+5 0.0000000 0.0000000 0.0000000 0.6127017                              
+6 0.0000000 0.0000000 0.0000000 0.0000000 0.5527864                    
+7 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.6127017          
+8 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.5527864
+> wf.Drayf3(D, c(0,5), 0.5)
+          1         2         3         4         5         6         7
+2 1.0000000                                                            
+3 0.5773503 0.7071068                                                  
+4 0.0000000 0.4472136 0.5773503                                        
+5 0.0000000 0.0000000 0.0000000 0.5773503                              
+6 0.0000000 0.0000000 0.0000000 0.0000000 0.5000000                    
+7 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.5773503          
+8 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.5000000
+> 
+> emap <- eigenmap(D, locations, wf.Drayf2, c(0,5), 0.5)
+> emap
+
+Moran's eigenvector map containing 7 basis functions.
+Functions span 8 observations.
+
+Eigenvalues:
+[1]  1.22819026  0.53763724  0.01357625 -0.41306933 -0.71518967 -0.88523923
+[7] -1.14504174
+
+> 
+> emap <- eigenmap(D, locations, wf.Drayf3, c(0,5), 0.25)
+> emap
+
+Moran's eigenvector map containing 7 basis functions.
+Functions span 8 observations.
+
+Eigenvalues:
+[1]  1.54876723  0.67470656  0.01532403 -0.52332775 -0.87384026 -1.12747562
+[7] -1.45495245
+
+> 
+> emap <- eigenmap(D, locations, wf.RBF, wpar = 0.1)
+> emap
+
+Moran's eigenvector map containing 7 basis functions.
+Functions span 8 observations.
+
+Eigenvalues:
+[1]  0.9644446  0.3746183  0.0298629 -0.2248835 -0.4760231 -0.6454339 -0.9641761
+
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("weighting-functions", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.254 0.004 0.258 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')
